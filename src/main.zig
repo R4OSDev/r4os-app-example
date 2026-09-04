@@ -276,8 +276,8 @@ const App = struct {
     }
 
     fn updateMetrics(self: *App, info: r4os.abi.GuiWindowInfo) void {
-        self.w = clampI32(info.client_w, 180, 1600);
-        self.h = clampI32(info.client_h, 100, 1000);
+        self.w = @max(info.client_w, 180);
+        self.h = @max(info.client_h, 100);
     }
 
     fn renderHosted(self: *App) void {
@@ -1094,12 +1094,6 @@ fn zSlice(buffer: []const u8) []const u8 {
     var len: usize = 0;
     while (len < buffer.len and buffer[len] != 0) : (len += 1) {}
     return buffer[0..len];
-}
-
-fn clampI32(value: i32, min_value: i32, max_value: i32) i32 {
-    if (value < min_value) return min_value;
-    if (value > max_value) return max_value;
-    return value;
 }
 
 fn focusIndex(target: FocusTarget) usize {
