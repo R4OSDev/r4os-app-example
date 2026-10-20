@@ -246,6 +246,10 @@ const App = struct {
                         .move => {},
                     },
                     .key => |key_message| {
+                        if (key_message.codepoint > 0xff) {
+                            if (self.input.focused and self.input.handleCodepointChecked(key_message.codepoint)) self.renderHosted();
+                            continue;
+                        }
                         const key = key_message.key;
                         if (self.handleModalKey(key)) {
                             continue;
