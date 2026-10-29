@@ -240,6 +240,12 @@ const App = struct {
                         if (self.ctx.window.info()) |info| self.updateMetrics(info);
                         self.renderHosted();
                     },
+                    .input_reset, .focus_lost => {
+                        if (self.mouse_capture.target != null) {
+                            self.mouse_capture.clear();
+                            self.renderHosted();
+                        }
+                    },
                     .mouse => |mouse| switch (mouse.action) {
                         .down => self.handleMouseDown(mouse.x, mouse.y),
                         .up => self.handleMouseUp(mouse.x, mouse.y),
