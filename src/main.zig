@@ -8,7 +8,7 @@ const AppApi = struct {
     dev: r4os.r4dev.Context,
     window: *r4os.Window,
 
-    fn init(app: *r4os.App, window: *r4os.Window) ?AppApi {
+    fn init(app: *r4os.App2, window: *r4os.Window) ?AppApi {
         return .{
             .sys = app.system(),
             .desk = app.desktop() orelse return null,
@@ -44,11 +44,11 @@ const TextStore = struct {
         const index = self.next;
         self.next += 1;
         const buffer = self.buffers[index][0..];
-        @memset(buffer, 0);
-        const len = @min(text.len, buffer.len - 1);
-        if (len > 0) @memcpy(buffer[0..len], text[0..len]);
-        buffer[len] = 0;
-        return buffer[0..len];
+        if (!r4os.bounded_text.labelZ(buffer, text)) {
+            @memset(buffer, 0);
+            return buffer[0..0];
+        }
+        return std.mem.sliceTo(buffer, 0);
     }
 };
 
@@ -79,7 +79,7 @@ const capture_dialog_no: usize = 101;
 const capture_dialog_ok: usize = 102;
 const capture_dialog_cancel: usize = 103;
 
-pub fn r4_app_main(contract: *r4os.App) i32 {
+pub fn r4_app_main(contract: *r4os.App2) i32 {
     var timers: [1]r4os.Timer = .{.{}};
     var window = contract.window(timers[0..]) orelse return r4os.abi.err_no_group;
     var ctx = AppApi.init(contract, &window) orelse return r4os.abi.err_no_group;
@@ -236,7 +236,7 @@ const App = struct {
             switch (self.ctx.window.waitMessage(r4os.time_contract.timeoutForever())) {
                 .message => |message| switch (message) {
                     .close => return 0,
-                    .resize => {
+                    .resize, .font_changed => {
                         if (self.ctx.window.info()) |info| self.updateMetrics(info);
                         self.renderHosted();
                     },
@@ -1113,4 +1113,14 @@ fn focusIndex(target: FocusTarget) usize {
 fn focusedTarget(index: usize) FocusTarget {
     if (index >= focus_items.len) return .input;
     return @enumFromInt(index);
+}
+
+test "migration example presentation labels keep whole UTF8 graphemes" {
+    var texts: TextStore = .{};
+    const long = "Ä中🙂" ** 30;
+    const label = texts.add(long);
+    try std.testing.expect(std.unicode.utf8ValidateSlice(label));
+    try std.testing.expect(std.mem.endsWith(u8, label, "..."));
+    try std.testing.expect(label.len < 96);
+    try std.testing.expectEqualStrings("Ä中🙂", texts.add("Ä中🙂"));
 }

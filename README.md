@@ -4,7 +4,7 @@
 
 ## Package
 
-- Version: `0.1.5`
+- Version: `0.1.10`
 - Image target: `/R4OS/SOFTWARE/DESKTOP/EXAMPLE.R4X`
 - Image scope: `full`
 - Canonical project manifest: `module.R4MF`
@@ -42,3 +42,13 @@ and `NOTICE`. Any repository-specific external material is documented in
 0.85.44: Rebuilt with SDK0.64.57 and the shared R4STD Unicode17.0.0
 extended grapheme editing boundaries. Byte offsets, scalar font advances
 and grapheme clusters are distinct; no shaping or BiDi support is implied.
+
+API migration 0.90.68
+---------------------
+New projects can follow this manifest's SDK_PROFILE=r4os-zig-generation2,
+Query2 platform imports and r4_app_main(*r4os.App2). Build source pins match
+the normal SDK201/Contract93 selection. The shared Window owns event/paint
+lifetime. Font changes rebuild layout. Temporary display labels use the
+shared whole-grapheme UTF8 presentation helper. Editable values remain in
+their existing TextField. The three static file-dialog rows demonstrate the
+widget interface and keep their synthetic selection behavior.

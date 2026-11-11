@@ -67,3 +67,13 @@ Reine Geometrie-, Hit-Test-, Fokus- und Action-Vertraege werden ausserdem auf
 dem Host geprueft mit:
 
     Tests\Gate\GuiSdkTests.bat
+
+API-Migration 0.90.68
+---------------------
+Example10 zeigt neuen Projekten den normalen App2-/Query2-Zielpfad aus
+SDK201/Contract93. Das Manifest setzt SDK_PROFILE=r4os-zig-generation2.
+r4_app_main nimmt *r4os.App2 entgegen. Window besitzt Wait und Paint.
+Fontwechsel baut das Layout neu auf. Anzeigetexte verwenden gemeinsame
+UTF8-Graphempraefixe. Eingaben gehoeren weiterhin ihrem TextField. Die drei
+statischen Dateidialogzeilen demonstrieren die Widgetoberflaeche und deren
+bisherige synthetische Auswahl.
