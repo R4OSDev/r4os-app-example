@@ -60,8 +60,8 @@ Projektstruktur seit 0.51.18:
 - `build.zig` baut EXAMPLE.R4X als eigenes SDK-Projekt.
 - `build.zig.zon` bindet `r4os_sdk` als Paket.
 - `module.R4MF` beschreibt Artefakt, Zielpfad und Contract.
-- R4L-Imports: `R4DESK:Query:1`, `R4DRAW:Query:1`, `R4NET:Query:1`,
-  `R4AUDIO:Query:1`, `R4DEV:Query:1`.
+- Platform-Imports: `R4DESK:Query2:2`, `R4DRAW:Query2:2`, `R4NET:Query2:2`,
+  `R4AUDIO:Query2:2`, `R4DEV:Query2:2`.
 
 Reine Geometrie-, Hit-Test-, Fokus- und Action-Vertraege werden ausserdem auf
 dem Host geprueft mit:
